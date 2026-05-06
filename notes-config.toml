@@ -1,0 +1,167 @@
+# Notes Graph app configuration (TOML).
+#
+# This file is read by the local API server at startup and served to the client.
+# Edit it to tune UI sizing, graph physics, and keyboard shortcuts (no rebuild required).
+#
+# Naming notes:
+# - "canvas" = the graph canvas (left pane).
+# - "sidebar" = the node editor (right pane) that appears when a node is selected.
+#
+# Keyboard shortcut format:
+# - Each shortcut is a list of "chords" (OR'ed together).
+# - A chord is an inline table with:
+#     - key  = KeyboardEvent.key (e.g. "Escape", "Tab", "+", "Delete")
+#     - code = KeyboardEvent.code (e.g. "NumpadAdd", "Equal")
+#     - shift / ctrl / alt / meta = optional booleans to require modifiers
+# - A chord matches when all specified fields match the keyboard event.
+#
+# Examples:
+#   escape_to_canvas = [{ key = "Escape" }]
+#   create_note = [{ key = "+" }, { code = "NumpadAdd" }, { code = "Equal", shift = true }]
+
+configVersion = 1
+
+[theme]
+# Global app background and base text color (applies to the whole page).
+# These are literal CSS values (so gradients are allowed).
+pageBackground = "#000000"
+pageText = "#e9edf5"
+
+# Workspace background (behind the canvas and sidebar).
+workspaceBackground = "#000000"
+
+# Canvas area background (CSS behind the <canvas>).
+canvasWrapBackground = "#000000"
+
+# Splitter colors.
+splitterBackground = "rgba(255, 255, 255, 0.06)"
+splitterHoverBackground = "rgba(255, 179, 71, 0.22)"
+
+# Sidebar colors.
+sidePaneBackground = "#000000"
+sidePaneEmptyText = "rgba(233, 237, 245, 0.72)"
+dividerBackground = "rgba(255, 255, 255, 0.14)"
+inputText = "#f7f8fb"
+inputUnderline = "rgba(255, 255, 255, 0.16)"
+inputUnderlineFocus = "rgba(255, 179, 71, 0.6)"
+
+# Segmented (editor mode) buttons.
+segmentedText = "rgba(247, 248, 251, 0.9)"
+segmentedHoverBackground = "rgba(255, 255, 255, 0.04)"
+segmentedActiveText = "#ffd7a0"
+segmentedActiveUnderline = "rgba(255, 179, 71, 0.7)"
+
+# Toast UI Editor overrides.
+editorLink = "#ffb347"
+editorPreviewDivider = "rgba(255, 255, 255, 0.06)"
+
+# Status dot colors (sidebar header).
+statusDotBorder = "rgba(255, 255, 255, 0.25)"
+statusDotIdle = "#6ce28f"
+statusDotSaving = "#f0c674"
+statusDotError = "#ff6f6f"
+
+# Banner (toast) colors.
+bannerBackground = "rgba(14, 16, 24, 0.9)"
+bannerBorder = "rgba(255, 255, 255, 0.12)"
+bannerText = "#e9edf5"
+bannerShadow = "0 8px 24px rgba(0, 0, 0, 0.35)"
+bannerSuccessBorder = "#ffb347"
+bannerSuccessText = "#ffb347"
+bannerErrorBorder = "#ff6f6f"
+bannerErrorText = "#ffbebe"
+
+[theme.canvas]
+# Canvas-drawn colors (these only affect what is painted inside the <canvas>).
+backgroundFill = "#000000"
+gridStroke = "rgba(255, 255, 255, 0.1)"
+linkStroke = "rgba(255, 255, 255, 0.24)"
+nodeFill = "#151a25"
+# Slightly darker fill for nodes with an empty body.
+nodeFillEmpty = "#080a0f"
+nodeFillAnchor = "#273447"
+nodeFillSelected = "#f6b649"
+nodeStroke = "rgba(255, 255, 255, 0.16)"
+nodeStrokeSelected = "#ce7b00"
+nodeText = "#e8ebf1"
+nodeTextSelected = "#111"
+
+[ui]
+# Default sidebar width (px) on first run.
+# After you manually resize the divider, the width is persisted in localStorage
+# under `notes:layout:sideWidthPx` and that value takes precedence.
+sideWidthPx = 420
+
+# Fixed heights (px) for the title row and links row in the sidebar.
+titleHeightPx = 102
+linksHeightPx = 39
+
+# Mobile title sizing (px) when the mobile layout is active.
+# If omitted, defaults to a proportional scale of titleHeightPx/titleFontPx.
+mobileTitleHeightPx = 72
+
+# Vertical splitter width (px) between canvas and sidebar.
+splitterPx = 10
+
+# Sidebar inner padding (px).
+sidePaddingPx = 6
+
+# Font sizes (px) for sidebar UI.
+titleFontPx = 42
+linksFontPx = 18
+editorFontPx = 16
+
+# Mobile title font size (px) when the mobile layout is active.
+# If omitted, defaults to a proportional scale of titleFontPx.
+mobileTitleFontPx = 28
+
+[graph.physics]
+# Repulsion model:
+# - repelSoftForce: baseline repulsion magnitude between all pairs.
+# - repelCloseStrength: extra repulsion strength as nodes get very close.
+# - repelPadding: how much extra separation to try to maintain (px).
+# - repelMaxForce: clamp on per-pair applied force.
+repelSoftForce = 3.0
+repelCloseStrength = 0.002
+repelPadding = 48
+repelMaxForce = 0.4
+
+# Link spring model:
+# - springLength: preferred link length (px).
+# - springStiffnessExt: spring stiffness constant.
+# - springDamping: spring damping constant (0..1-ish).
+springLength = 220
+springStiffnessExt = 0.02
+springDamping = 0.05
+
+# Link "angle memory":
+# Each directed endpoint of a link remembers the angle it last pointed at.
+# This adds a small force to keep incident links from "spinning" too much.
+linkAngleStiffness = 0.0003
+linkAngleMaxForce = 0.35
+
+[shortcuts.sidebar]
+# Tab focus order within the sidebar.
+# Supported values: "title", "markdown", "links".
+tabOrder = ["title", "markdown", "links"]
+
+# If true, Tab on the last field wraps to the first (and Shift+Tab wraps backward).
+tabCycle = true
+
+# Moves focus forward/backward within `tabOrder`.
+focusNext = [{ key = "Tab", shift = false }]
+focusPrev = [{ key = "Tab", shift = true }]
+
+[shortcuts.global]
+# If focus is inside the sidebar, this moves focus to the canvas while keeping the selection.
+escapeToCanvas = [{ key = "Escape" }]
+
+# If focus is already on the canvas (or not in the sidebar), this clears the current selection.
+clearSelection = [{ key = "Escape" }]
+
+[shortcuts.canvas]
+# Create a note. If a node is selected, the new note is linked to it.
+createNote = [{ key = "+" }, { code = "NumpadAdd" }, { code = "Equal", shift = true }]
+
+# Delete the selected note.
+deleteSelected = [{ key = "Delete" }, { key = "Backspace" }]
