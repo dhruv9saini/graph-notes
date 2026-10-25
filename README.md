@@ -1,23 +1,8 @@
 # Graph Notes
 
-By Dhruv Saini. [Video demonstration](https://drive.google.com/file/d/1FhOEWrFZQKOaWhtqX9v4ZyAvTKfGtIrm/view).
-
 Graph Notes is a local-first graph note app. Notes appear as linked cards on a physics-backed canvas; selecting a card opens a side pane for editing the title, Markdown body, and numeric links.
 
 The app is meant to run on your own machine. The web server serves the built app and stores notes on disk in `notes-data/`.
-
-## What I built
-
-The app combines Markdown editing with a spatial map of linked notes. My code implements the graph interface, note/link editing, local file storage and web API, and connects the graph layout to the physics simulation.
-
-React handles the UI framework, Matter.js supplies the physics engine, Toast UI supplies the Markdown editor, and Capacitor supplies the Android wrapper. Personal note contents are separate from the application source.
-
-## Source guide
-
-- [src/App.tsx](src/App.tsx): note editing and application state.
-- [src/components/GraphCanvas.tsx](src/components/GraphCanvas.tsx): graph interaction and physics integration.
-- [server/notes-web-server.ts](server/notes-web-server.ts): local note storage and API.
-- [notes-config.toml](notes-config.toml): default appearance and interaction settings.
 
 ## Install
 
@@ -30,7 +15,7 @@ Requirements:
 Clone and build:
 
 ```bash
-git clone https://github.com/dhruv9saini/graph-notes.git
+git clone https://github.com/oof-baroomf/graph-notes.git
 cd graph-notes
 bun install
 bun run build:web
